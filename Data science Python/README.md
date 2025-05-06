@@ -408,7 +408,7 @@ There is a two types of data
 
 some times categorical represent by using numbers<br>
 mode is the only one can used in categorical data<br>
-mean is more sensative for data than medial, the mean most use it in symetrical data<br>
+mean is more sensative for data than **medial**, the mean most use it in symetrical data<br>
 when data not symetrical there is two kind
 * left-skewed  
 * right-skewed
@@ -726,10 +726,109 @@ types of it
 ![alt text](image-27.png)
 
 # Introduction to Data Visualization with Matplotlib
-## Ch1 Introduction to Matplotlib
+### Ch1 Introduction to Matplotlib
 
 ```
 import matplotlib.pyplot as plt
-fig,ax =plt.subplots()# this give you figure and axis
+fig,ax =plt.subplots()# to make more than one diagram in the same plot 
 ```
+When creating small multiples, it is often preferable to make sure that the different plots are displayed with the same scale used on the y-axis. This can be configured by setting the ```sharey``` key-word to ```True```.
+```
+fig,ax =plt.subplots(,sharey=True)
+```
+### Ch2 plotting time-series data
+```
+ax2=ax1.twinx() # to make the x-axis is the same and different y-axis
+```
+to change the color of axis
+```
+ax.tick_params(axis,color='')
+```
+to annotate data
+```
+ax.annotate('text you want to put',xy=(value of x,value of y))
+```
+like
+``` 
+ax2.annotate(">1 degree", xy=(pd.Timestamp('2015-10-06'),1), xytext=(pd.Timestamp('2008-10-06'),-0.2), arrowprops={'arrowstyle':'->','color':'gray'})
+```
+### Ch3 Quantitative comparsions
+```
+ax.bar(medals.index,medals['Bronze'],
+        bottom=medals['Gold']+medals['silver'],label='Bronze')
+```
+**Statistical plotting**
+We use ```yerr``` to make marker at specific number in data visualisation
+```
+fig, ax = plt.subplots()
+
+# Add a bar for the rowing "Height" column mean/std
+ax.bar("Rowing",mens_rowing['Height'].mean(), yerr=mens_rowing['Height'].std())
+
+# Add a bar for the gymnastics "Height" column mean/std
+ax.bar("Gymnastics",mens_gymnastics['Height'].mean(), yerr=mens_gymnastics['Height'].std())
+
+# Label the y-axis
+ax.set_ylabel('Height (cm)')
+
+plt.show()
+```
+if the color is important:<br> 
+**use seaborn-colorblind**<br>
+to safe figure<br>
+```
+fig.savefig('my_figure_300dpi.png',dpi=300)
+```
+and if you want to determine the dimension of the figure
+```
+fig.set_size_inches([5,3])
+```
+
+# Introduction to Data Visualization with Seaborn
+## Ch1 Introduction to Seaborn
+if we need to count the number of Categorical(Qualitative)
+and want to show it in graph
+```
+sns.countplot(x='',data=)
+```
+hue allows us to easily make subgroups within Seaborn plots<br>
+```
+sns.scatterplot(x="absences", y="G3", 
+                data=student_data, 
+                hue="location",
+                hue_order=['',''])
+```
+notice that the sns always use say the data u used and dont make somehting like this ```df['column']``` <br>
+we prefer use ```relplot``` instead of ```scatterplot```<br>
+*  ```replot``` lets you create subplots in a single figure
+```
+sns.relplot(x="absences", y="G3", 
+                data=student_data,kind='scatter')
+```
+if you want to make subplot
+```
+sns.relplot(x="G1", y="G3", 
+            data=student_data,
+            kind="scatter", 
+            col="schoolsup",# col is column not color
+            col_order=["yes", "no"],
+            row='',
+            row_order=['','']
+            )
+```
+if you want to make the data varient from each other you can take this as refrence 
+```
+sns.relplot(x='acceleration',y='mpg',
+            data=mpg,kind='scatter',
+            size= 'origin',hue='origin',
+            style='origin')
+```
+**Confidence interval(CI)**<br>
+A confidence interval (CI) is a statistical tool used to estimate the range within which a population parameter (like a mean, proportion, or difference) is likely to lie, based on sample data. It quantifies the uncertainty around a point estimate (e.g., sample mean) and provides a range of plausible values for the true population parameter.
+![alt text](image-28.png)
+to make CI you can use ```ci='sd'``` in ```relplot```<br>
+we use categorical plot when we need comparisons between groups 
+and example of it **countplot** and **bar plot**
+and ```catplot``` it's like ```relplot``` but used to create categorical plots 
+
 
